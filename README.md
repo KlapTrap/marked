@@ -181,6 +181,47 @@ This code will output the following HTML:
 </h1>
 ```
 
+#### Adding new rules
+This branch is patched in order to allow to add custom rules with
+parser function. Here is an example of adding LaTEX rules
+with usage of  [KaTeX](https://github.com/davitv/KaTeX) lib
+(see [demo](http://marked.apifor.me/)):
+```javascript
+marked(input, {
+    // custom block rules
+    block_rules: {
+        latex: {
+            reg: /^( *\$\$[^\$]+\$\$)+/,
+            lex: function(src, cap) {
+                src = src.substring(cap[0].length);
+                cap = cap[0].replace(/\$/gm, '');
+                return {src:src, text: cap}
+            },
+            parse: function(cap){
+                return katex.renderToString(cap);
+            }
+        }
+    },
+    // custom inline rule, we don't need lex here
+    inline_rules: {
+        latex: {
+            reg: /^\$([^\$])+\$(?!\$)/,
+            parse: function(src, cap){
+                src = src.substring(cap[0].length);
+                cap = cap[0].replace(/\$/gm, '');
+                return {
+                    src: src,
+                    text: katex.renderToString(cap)
+                };
+            }
+        }
+    },
+    // inline text rule in order to parse $ sign correctly
+    inlineTextReg: /^[\s\S]+?(?=[\\<!\[_*`\$]| {2,}\n|$)/
+});
+```
+
+
 #### Block level renderer methods
 
 - code(*string* code, *string* language)
