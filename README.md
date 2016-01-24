@@ -184,8 +184,7 @@ This code will output the following HTML:
 #### Adding new rules
 This branch is patched in order to allow to add custom rules with
 parser function. Here is an example of adding LaTEX rules
-with usage of  [KaTeX](https://github.com/davitv/KaTeX) lib
-(see [demo](http://marked.apifor.me/)):
+with usage of  [KaTeX](https://github.com/davitv/KaTeX) lib:
 ```javascript
 marked(input, {
     // custom block rules
